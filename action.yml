@@ -1,5 +1,5 @@
-﻿name: ai-admissibility-action
-description: External admission gate for GitHub Actions with fail-closed preflight checks.
+name: ai-admissibility-action
+description: External admission gate for GitHub Actions before execution
 author: Pin Floyd
 branding:
   icon: shield

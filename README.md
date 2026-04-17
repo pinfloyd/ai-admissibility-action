@@ -1,4 +1,4 @@
-﻿# ai-admissibility-action
+# ai-admissibility-action
 
 External admission gate for GitHub Actions.
 
@@ -6,33 +6,37 @@ This repository is the clean action-only install surface for AI Admissibility.
 
 ## What it does
 
-- checks that authority-url is present
-- checks that authority-pubkey is present
-- checks that policy-id is present
-- checks that trust-verdict is present
+- checks that `authority-url` is present
+- checks that `authority-pubkey` is present
+- checks that `policy-id` is present
+- checks that `trust-verdict` is present
 - blocks placeholder values
-- fails closed if trust-verdict is not PASS
+- fails closed if `trust-verdict` is not `PASS`
 
 ## Current status
 
 This public action surface is a preview install surface.
+
 Runtime authority integration is not wired in this public repository yet, so the action currently fails closed intentionally after preflight validation.
 
 ## Inputs
 
-- authority-url
-- authority-pubkey
-- policy-id
-- trust-verdict
+- `authority-url`
+- `authority-pubkey`
+- `policy-id`
+- `trust-verdict`
 
 ## Example
 
-uses: pinfloyd/ai-admissibility-action@v0.1.0
-with:
-  authority-url: https://example-authority.invalid
-  authority-pubkey: example-real-pubkey
-  policy-id: example-real-policy
-  trust-verdict: PASS
+```yaml
+- name: External admission gate
+  uses: pinfloyd/ai-admissibility-action@v0.1.0
+  with:
+    authority-url: https://example-authority.invalid
+    authority-pubkey: example-real-pubkey
+    policy-id: example-real-policy
+    trust-verdict: PASS
+```
 
 ## Commercial path
 
