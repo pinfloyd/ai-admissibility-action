@@ -49,3 +49,29 @@ GitHub is not checkout.
 
 - GitHub product surface: https://github.com/pinfloyd/cnp-action
 - Zenodo reference: https://zenodo.org/records/18716478
+
+## Proof access bridge input
+
+This Marketplace Action now includes the `proof-access-id` input for the future self-guided proof-access bridge.
+
+Required bridge inputs:
+
+- `authority-url`
+- `policy-id`
+- `proof-access-id`
+
+The action must fail closed when `proof-access-id` is missing or left as a placeholder.
+
+Runtime authority integration still requires a separately verified implementation step before this surface should be treated as a complete production bridge.
+
+Example:
+
+```yaml
+- uses: pinfloyd/ai-admissibility-action@v0.1.0
+  with:
+    authority-url: https://admit.ai-admissibility.com/admit
+    policy-id: ai-secrets-v1
+    proof-access-id: ${{ secrets.AI_ADMISSIBILITY_PROOF_ACCESS_ID }}
+    authority-pubkey: ${{ secrets.AI_ADMISSIBILITY_AUTHORITY_PUBKEY }}
+    trust-verdict: PASS
+```
