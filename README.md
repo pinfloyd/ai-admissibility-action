@@ -41,7 +41,7 @@ Runtime authority integration is not wired in this public repository yet, so the
 ## Commercial path
 
 - site: https://ai-admissibility.com/
-- request path: https://access-cnp-run.cnpworkersdev.workers.dev/
+- request path: https://ai-admissibility.com/request/
 
 GitHub is not checkout.
 
