@@ -23,7 +23,17 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Validate proof access id       shell: bash       run: |         if [ -z "${{ inputs.proof-access-id }}" ]; then           echo "proof-access-id is required"           exit 1         fi         if [ "${{ inputs.proof-access-id }}" = "YOUR_PROOF_ACCESS_ID" ] || [ "${{ inputs.proof-access-id }}" = "placeholder" ] || [ "${{ inputs.proof-access-id }}" = "TODO" ]; then           echo "proof-access-id must not be a placeholder"           exit 1         fi
+    - name: Validate proof access id
+      shell: bash
+      run: |
+        if [ -z "${{ inputs.proof-access-id }}" ]; then
+          echo "proof-access-id is required"
+          exit 1
+        fi
+        if [ "${{ inputs.proof-access-id }}" = "YOUR_PROOF_ACCESS_ID" ] || [ "${{ inputs.proof-access-id }}" = "placeholder" ] || [ "${{ inputs.proof-access-id }}" = "TODO" ]; then
+          echo "proof-access-id must not be a placeholder"
+          exit 1
+        fi
     - name: Preflight gate
       shell: pwsh
       run: |
