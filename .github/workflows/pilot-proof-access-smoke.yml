@@ -1,0 +1,55 @@
+name: Pilot Proof Access Smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      proof_access_id:
+        description: "Optional proof_access_id from https://ai-admissibility.com/#get-proof-access"
+        required: false
+        type: string
+      github_repo:
+        description: "Repository label for the pilot smoke run"
+        required: false
+        default: "pinfloyd/ai-admissibility-action"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  pilot-proof-access-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve proof access id
+        id: proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "${{ inputs.proof_access_id }}" ]; then
+            echo "proof_access_id=${{ inputs.proof_access_id }}" >> "$GITHUB_OUTPUT"
+          elif [ -n "${{ secrets.AI_ADMISSIBILITY_PROOF_ACCESS_ID }}" ]; then
+            echo "proof_access_id=${{ secrets.AI_ADMISSIBILITY_PROOF_ACCESS_ID }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "Missing proof_access_id. Get pilot Proof Access at https://ai-admissibility.com/#get-proof-access and pass it as workflow input or set AI_ADMISSIBILITY_PROOF_ACCESS_ID." >&2
+            exit 1
+          fi
+
+      - name: Run AI Admissibility action
+        uses: ./
+        with:
+          authority-url: https://admit.ai-admissibility.com/admit
+          authority-pubkey: ${{ secrets.AI_ADMISSIBILITY_AUTHORITY_PUBKEY }}
+          policy-id: demo-policy
+          proof-access-id: ${{ steps.proof.outputs.proof_access_id }}
+          trust-verdict: PASS
+
+      - name: Smoke summary
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "PILOT_PROOF_ACCESS_SMOKE=PASS"
+          echo "REPO=${{ inputs.github_repo }}"
+          echo "NON_CLAIMS=synthetic_evaluation_only_not_production_not_paid_tier_not_private_deployment"
