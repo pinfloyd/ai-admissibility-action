@@ -20,6 +20,10 @@ inputs:
   proof-access-id:
     description: "Temporary proof access id for the self-guided proof-access bridge."
     required: true
+  pilot-smoke-only:
+    description: "Synthetic pilot smoke mode for Marketplace onboarding only. Not production access."
+    required: false
+    default: "false"
 runs:
   using: composite
   steps:
@@ -42,6 +46,7 @@ runs:
         $authorityPubkey = '${{ inputs.authority-pubkey }}'
         $policyId = '${{ inputs.policy-id }}'
         $trustVerdict = '${{ inputs.trust-verdict }}'
+        $pilotSmokeOnly = '${{ inputs.pilot-smoke-only }}'
         if ([string]::IsNullOrWhiteSpace($authorityUrl)) { Write-Error "FAIL_CLOSED: authority-url is missing"; exit 1 }
         if ([string]::IsNullOrWhiteSpace($authorityPubkey)) { Write-Error "FAIL_CLOSED: authority-pubkey is missing"; exit 1 }
         if ([string]::IsNullOrWhiteSpace($policyId)) { Write-Error "FAIL_CLOSED: policy-id is missing"; exit 1 }
@@ -50,5 +55,10 @@ runs:
         if ($authorityPubkey -eq 'example-pubkey-placeholder') { Write-Error "FAIL_CLOSED: placeholder authority-pubkey is not allowed"; exit 1 }
         if ($policyId -eq 'example-policy') { Write-Error "FAIL_CLOSED: placeholder policy-id is not allowed"; exit 1 }
         if ($trustVerdict -ne 'PASS') { Write-Error "FAIL_CLOSED: trust-verdict must be PASS"; exit 1 }
+        if ($pilotSmokeOnly -eq 'true') {
+          Write-Host "PILOT_PROOF_ACCESS_SMOKE=PASS"
+          Write-Host "NON_CLAIMS=synthetic_evaluation_only_not_production_not_paid_tier_not_private_deployment"
+          exit 0
+        }
         Write-Error "FAIL_CLOSED: runtime authority integration is not wired yet"
         exit 1

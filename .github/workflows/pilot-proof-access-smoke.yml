@@ -41,10 +41,11 @@ jobs:
         uses: ./
         with:
           authority-url: https://admit.ai-admissibility.com/admit
-          authority-pubkey: ${{ secrets.AI_ADMISSIBILITY_AUTHORITY_PUBKEY }}
+          authority-pubkey: synthetic-pilot-smoke-pubkey-not-production
           policy-id: demo-policy
           proof-access-id: ${{ steps.proof.outputs.proof_access_id }}
           trust-verdict: PASS
+          pilot-smoke-only: true
 
       - name: Smoke summary
         shell: bash
