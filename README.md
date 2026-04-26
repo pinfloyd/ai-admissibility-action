@@ -75,3 +75,14 @@ Example:
     authority-pubkey: ${{ secrets.AI_ADMISSIBILITY_AUTHORITY_PUBKEY }}
     trust-verdict: PASS
 ```
+## Proof Access pilot onboarding
+
+Use Proof Access when you want to test this action before paid or private deployment access.
+
+1. Install this GitHub Action in your workflow.
+2. Get temporary pilot Proof Access from https://ai-admissibility.com/#get-proof-access.
+3. The form posts to https://ai-admissibility.com/proof-access and returns a `proof_access_id`.
+4. Add `AI_ADMISSIBILITY_PROOF_ACCESS_ID` and `AI_ADMISSIBILITY_AUTHORITY_PUBKEY` as repository secrets.
+5. Run the workflow and inspect the authority result. A valid pilot context can proceed to the hosted authority decision path; invalid or missing context must fail closed as DENY.
+
+Pilot non-claims: Proof Access is synthetic evaluation only. It is not production access, not paid tier access, not private deployment, and not a customer no-bypass guarantee.
