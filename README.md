@@ -2,6 +2,8 @@
 
 ## Proof Access pilot in 30 seconds
 
+Technical brief: [AI Admissibility Technical Brief](docs/AI_ADMISSIBILITY_TECHNICAL_BRIEF.md) / [site version](https://ai-admissibility.com/technical-brief/).
+
 This GitHub Action is a pilot onboarding surface for AI Admissibility. It shows how a user can request temporary Proof Access, pass a `proof_access_id` into GitHub Actions, and see a synthetic `PASS` smoke result without touching production access.
 
 Fast path:
