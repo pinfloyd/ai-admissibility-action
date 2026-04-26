@@ -1,5 +1,21 @@
 # ai-admissibility-action
 
+## Proof Access pilot in 30 seconds
+
+This GitHub Action is a pilot onboarding surface for AI Admissibility. It shows how a user can request temporary Proof Access, pass a `proof_access_id` into GitHub Actions, and see a synthetic `PASS` smoke result without touching production access.
+
+Fast path:
+1. Open `https://ai-admissibility.com/#get-proof-access`.
+2. Request pilot Proof Access for this repository.
+3. Copy the returned `proof_access_id`.
+4. Run the `Pilot Proof Access Smoke` workflow manually and paste the id.
+5. Confirm the workflow log contains `PILOT_PROOF_ACCESS_SMOKE=PASS`.
+
+Verified pilot E2E reference: `https://github.com/pinfloyd/ai-admissibility-action/actions/runs/24959798826`.
+
+Non-claims: this pilot path is synthetic evaluation only. It is not production access, not paid tier access, not private deployment, and not a customer no-bypass guarantee. Normal runtime execution remains fail-closed until real authority integration is wired.
+
+
 External admission gate for GitHub Actions.
 
 This repository is the clean action-only install surface for AI Admissibility.
