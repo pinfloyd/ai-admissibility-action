@@ -104,3 +104,22 @@ Use Proof Access when you want to test this action before paid or private deploy
 5. Run the workflow and inspect the authority result. A valid pilot context can proceed to the hosted authority decision path; invalid or missing context must fail closed as DENY.
 
 Pilot non-claims: Proof Access is synthetic evaluation only. It is not production access, not paid tier access, not private deployment, and not a customer no-bypass guarantee.
+---
+
+## Platform-native policy vs external admission
+
+Pre-run policy is necessary. External admission is the stronger boundary.
+
+Platform-native controls improve the executor. External admission separates execution from authority.
+
+If execution can proceed without an external allow decision, the system has policy, but not external admission authority.
+
+**Surrogate Boundary Test:** Can execution proceed without an external allow decision?
+
+**No Admission = No Execution.**
+
+Learn more:
+- https://ai-admissibility.com/platform-native-policy/
+- https://ai-admissibility.com/external-admission-authority/
+- https://ai-admissibility.com/surrogate-boundary-test/
+
