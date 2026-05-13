@@ -81,10 +81,11 @@ If execution can proceed without an external allow decision, the system has poli
 
 ## Request Proof Access or private deployment review
 
-https://ai-admissibility.com/request/
+https://ai-admissibility.com/request
 
 ## Learn more
 
 - Technical Brief: https://ai-admissibility.com/technical-brief/
 - Surrogate Boundary Test: https://ai-admissibility.com/surrogate-boundary-test/
 - Reference Guide: https://ai-admissibility.com/reference-guide/
+
