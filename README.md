@@ -1,112 +1,75 @@
-# ai-admissibility-action
+# AI Admissibility Action
 
-## Proof Access pilot in 30 seconds
+**AI Admissibility Action is an external admission gate for GitHub Actions before trusted execution.**
 
-Technical brief: [AI Admissibility Technical Brief](docs/AI_ADMISSIBILITY_TECHNICAL_BRIEF.md) / [site version](https://ai-admissibility.com/technical-brief/).
+Public Marketplace version = **pilot / fail-closed preview**.  
+Production authority integration = **Proof Access / private deployment review**.
 
-This GitHub Action is a pilot onboarding surface for AI Admissibility. It shows how a user can request temporary Proof Access, pass a `proof_access_id` into GitHub Actions, and see a synthetic `PASS` smoke result without touching production access.
+## What risk does it address?
 
-Fast path:
-1. Open `https://ai-admissibility.com/#get-proof-access`.
-2. Request pilot Proof Access for this repository.
-3. Copy the returned `proof_access_id`.
-4. Run the `Pilot Proof Access Smoke` workflow manually and paste the id.
-5. Confirm the workflow log contains `PILOT_PROOF_ACCESS_SMOKE=PASS`.
+GitHub Actions can build, test, release, deploy, touch secrets, assume cloud roles, or run production-impacting automation. When AI-generated PRs, agent-created changes, CI/CD workflows, secrets, cloud roles, deployment paths, or automated remediation steps are involved, the question is not only whether the workflow is valid. The question is whether the protected execution context should be admitted at all.
 
-Verified pilot E2E reference: `https://github.com/pinfloyd/ai-admissibility-action/actions/runs/24959798826`.
+## What happens?
 
-Non-claims: this pilot path is synthetic evaluation only. It is not production access, not paid tier access, not private deployment, and not a customer no-bypass guarantee. Normal runtime execution remains fail-closed until real authority integration is wired.
+Valid pilot context -> admission path.  
+Missing or invalid context -> fail closed.
 
+## Install
+~~~yaml
+- name: AI Admissibility Gate
+  uses: pinfloyd/ai-admissibility-action@v0.1.1
+  with:
+    mode: pilot
+~~~
 
-External admission gate for GitHub Actions.
+## What this is not
 
-This repository is the clean action-only install surface for AI Admissibility.
+Not a scanner.  
+Not monitoring.  
+Not a secrets manager.  
+Not GitHub-native approval.  
+Not production no-bypass by default.
 
-## What it does
+## Public pilot vs production authority
 
-- checks that `authority-url` is present
-- checks that `authority-pubkey` is present
-- checks that `policy-id` is present
-- checks that `trust-verdict` is present
-- blocks placeholder values
-- fails closed if `trust-verdict` is not `PASS`
+**Public Marketplace version**
+- installable pilot surface;
+- fail-closed preview behavior;
+- Proof Access request path;
+- no customer production no-bypass guarantee by default.
 
-## Current status
-
-This public action surface is a preview install surface.
-
-Runtime authority integration is not wired in this public repository yet, so the action currently fails closed intentionally after preflight validation.
+**Production / private deployment**
+- external authority integration;
+- customer-specific runtime binding;
+- buyer-controlled deployment values;
+- acceptance / proof package.
 
 ## Inputs
 
+The public action surface supports pilot / preview inputs used to demonstrate fail-closed admission behavior:
+
+- `mode`
 - `authority-url`
 - `authority-pubkey`
 - `policy-id`
 - `trust-verdict`
-
-## Example
-
-```yaml
-- name: External admission gate
-  uses: pinfloyd/ai-admissibility-action@v0.1.0
-  with:
-    authority-url: https://example-authority.invalid
-    authority-pubkey: example-real-pubkey
-    policy-id: example-real-policy
-    trust-verdict: PASS
-```
-
-## Commercial path
-
-- site: https://ai-admissibility.com/
-- request path: https://ai-admissibility.com/request/
-
-GitHub is not checkout.
-
-## Proof and reference
-
-- GitHub product surface: https://github.com/pinfloyd/cnp-action
-- Zenodo reference: https://zenodo.org/records/18716478
-
-## Proof access bridge input
-
-This Marketplace Action now includes the `proof-access-id` input for the future self-guided proof-access bridge.
-
-Required bridge inputs:
-
-- `authority-url`
-- `policy-id`
 - `proof-access-id`
 
-The action must fail closed when `proof-access-id` is missing or left as a placeholder.
+Missing placeholder or invalid admission context must fail closed.
 
-Runtime authority integration still requires a separately verified implementation step before this surface should be treated as a complete production bridge.
+## Proof Access
 
-Example:
-
-```yaml
-- uses: pinfloyd/ai-admissibility-action@v0.1.0
-  with:
-    authority-url: https://admit.ai-admissibility.com/admit
-    policy-id: ai-secrets-v1
-    proof-access-id: ${{ secrets.AI_ADMISSIBILITY_PROOF_ACCESS_ID }}
-    authority-pubkey: ${{ secrets.AI_ADMISSIBILITY_AUTHORITY_PUBKEY }}
-    trust-verdict: PASS
-```
-## Proof Access pilot onboarding
-
-Use Proof Access when you want to test this action before paid or private deployment access.
+Use Proof Access when you want to test the public Marketplace action before paid or private deployment access.
 
 1. Install this GitHub Action in your workflow.
-2. Get temporary pilot Proof Access from https://ai-admissibility.com/#get-proof-access.
-3. The form posts to https://ai-admissibility.com/proof-access and returns a `proof_access_id`.
-4. Add `AI_ADMISSIBILITY_PROOF_ACCESS_ID` and `AI_ADMISSIBILITY_AUTHORITY_PUBKEY` as repository secrets.
-5. Run the workflow and inspect the authority result. A valid pilot context can proceed to the hosted authority decision path; invalid or missing context must fail closed as DENY.
+2. Request Proof Access or private deployment review.
+3. Add the returned values as repository secrets when instructed.
+4. Run the workflow and inspect the result.
+5. Missing or invalid context must fail closed.
 
 Pilot non-claims: Proof Access is synthetic evaluation only. It is not production access, not paid tier access, not private deployment, and not a customer no-bypass guarantee.
----
 
-## Platform-native policy vs external admission
+## Why external admission?
 
 Pre-run policy is necessary. External admission is the stronger boundary.
 
@@ -114,12 +77,14 @@ Platform-native controls improve the executor. External admission separates exec
 
 If execution can proceed without an external allow decision, the system has policy, but not external admission authority.
 
-**Surrogate Boundary Test:** Can execution proceed without an external allow decision?
-
 **No Admission = No Execution.**
 
-Learn more:
-- https://ai-admissibility.com/platform-native-policy/
-- https://ai-admissibility.com/external-admission-authority/
-- https://ai-admissibility.com/surrogate-boundary-test/
+## Request Proof Access or private deployment review
 
+https://ai-admissibility.com/request/
+
+## Learn more
+
+- Technical Brief: https://ai-admissibility.com/technical-brief/
+- Surrogate Boundary Test: https://ai-admissibility.com/surrogate-boundary-test/
+- Reference Guide: https://ai-admissibility.com/reference-guide/
