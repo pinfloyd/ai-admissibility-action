@@ -2,19 +2,35 @@
 
 **Fail-closed external admission gate for GitHub Actions before execution.**
 
-Public Marketplace version = evaluation surface.
-Production authority integration = separate Proof Access / private deployment path.
+Use this action when workflow execution should **stop unless the required admission context is present and valid**.
+
+## Start here
+
+1. Install the action in your workflow.
+2. Request Proof Access for evaluation or request private deployment review.
+3. Supply the issued values only as instructed.
+4. Run the workflow.
+5. Missing or invalid context must fail closed.
+
+[Request access](https://ai-admissibility.com/request)
+
+## Who this is for
+
+- teams evaluating execution control for GitHub Actions;
+- teams worried about AI-generated changes reaching CI/CD;
+- teams that want fail-closed behavior instead of silent continuation;
+- teams comparing platform-native policy vs external admission.
 
 ## What risk does it address?
 
-GitHub Actions can build, test, release, deploy, touch secrets, assume cloud roles, or run production-impacting automation.
-When AI-generated changes, agent-created pull requests, secrets exposure risk, or automation-driven deployment paths are involved, the key question is not only whether the workflow is syntactically valid.
+GitHub Actions can build, test, release, deploy, touch secrets, assume cloud roles, or trigger production-impacting automation.
+When AI-generated changes, agent-created pull requests, secrets exposure risk, or automation-driven deployment paths are involved, the key question is not only whether a workflow is syntactically valid.
 The key question is whether the protected execution context should be admitted at all.
 
 ## What happens?
 
-Valid evaluation context -> evaluation path.
-Missing or invalid context -> fail closed.
+- valid evaluation context -> evaluation path;
+- missing or invalid context -> fail closed.
 
 ## Example usage
 
@@ -30,31 +46,7 @@ Missing or invalid context -> fail closed.
     pilot-smoke-only: "true"
 ```
 
-## What this is not
-
-- Not a scanner.
-- Not monitoring.
-- Not a secrets manager.
-- Not GitHub-native approval.
-- Not a production no-bypass guarantee by default.
-
-## Public evaluation vs production authority
-
-**Public Marketplace version**
-- installable evaluation surface;
-- fail-closed preview behavior;
-- Proof Access request path;
-- no customer-specific production guarantee by default.
-
-**Production / private deployment**
-- external authority integration;
-- customer-specific runtime binding;
-- buyer-controlled deployment values;
-- acceptance / proof package.
-
 ## Inputs
-
-The public Action surface uses the following evaluation-facing inputs:
 
 - `authority-url`
 - `authority-pubkey`
@@ -65,21 +57,33 @@ The public Action surface uses the following evaluation-facing inputs:
 
 Missing or invalid admission context must fail closed.
 
+## What this is not
+
+- Not a scanner.
+- Not monitoring.
+- Not a secrets manager.
+- Not GitHub-native approval.
+- Not a production no-bypass guarantee by default.
+
+## Public evaluation vs private deployment
+
+**Public Marketplace version**
+- installable evaluation surface;
+- fail-closed preview behavior;
+- Proof Access request path;
+- not a customer-specific production guarantee by default.
+
+**Private deployment path**
+- external authority integration;
+- customer-specific runtime binding;
+- controlled deployment values;
+- acceptance / proof package.
+
 ## Proof Access
 
 Use Proof Access when you want to evaluate the public Marketplace action before paid or private deployment access.
 
-1. Install this GitHub Action in your workflow.
-2. Request Proof Access or private deployment review.
-3. Add the returned values only as instructed.
-4. Run the workflow and inspect the result.
-5. Missing or invalid context must fail closed.
-
 Pilot non-claims: Proof Access is synthetic evaluation only. It is not production access, not paid tier access, not private deployment, and not a customer no-bypass guarantee.
-
-## Request Proof Access or private deployment review
-
-[Request access](https://ai-admissibility.com/request)
 
 ## Why external admission?
 
