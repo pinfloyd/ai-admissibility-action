@@ -1,5 +1,5 @@
 name: ai-admissibility-action
-description: External admission gate for GitHub Actions before execution
+description: Fail-closed external admission gate for GitHub Actions before execution.
 author: Pin Floyd
 branding:
   icon: shield
@@ -18,10 +18,10 @@ inputs:
     description: Runtime trust verdict. Must be PASS.
     required: false
   proof-access-id:
-    description: "Temporary proof access id for the self-guided proof-access bridge."
+    description: Proof Access ID for the self-guided evaluation flow.
     required: true
   pilot-smoke-only:
-    description: "Synthetic pilot smoke mode for Marketplace onboarding only. Not production access."
+    description: Synthetic evaluation mode for Marketplace onboarding only. Not production access.
     required: false
     default: "false"
 runs:
@@ -34,8 +34,8 @@ runs:
           echo "proof-access-id is required"
           exit 1
         fi
-        if [ "${{ inputs.proof-access-id }}" = "YOUR_PROOF_ACCESS_ID" ] || [ "${{ inputs.proof-access-id }}" = "placeholder" ] || [ "${{ inputs.proof-access-id }}" = "TODO" ]; then
-          echo "proof-access-id must not be a placeholder"
+        if [ "${{ inputs.proof-access-id }}" = "REPLACE_WITH_PROOF_ACCESS_ID" ] || [ "${{ inputs.proof-access-id }}" = "example-proof-access-id" ] || [ "${{ inputs.proof-access-id }}" = "proof-access-id" ]; then
+          echo "proof-access-id must be a real issued evaluation id"
           exit 1
         fi
     - name: Preflight gate
@@ -51,9 +51,9 @@ runs:
         if ([string]::IsNullOrWhiteSpace($authorityPubkey)) { Write-Error "FAIL_CLOSED: authority-pubkey is missing"; exit 1 }
         if ([string]::IsNullOrWhiteSpace($policyId)) { Write-Error "FAIL_CLOSED: policy-id is missing"; exit 1 }
         if ([string]::IsNullOrWhiteSpace($trustVerdict)) { Write-Error "FAIL_CLOSED: trust-verdict is missing"; exit 1 }
-        if ($authorityUrl -eq 'https://admit.ai-admissibility.com') { Write-Error "FAIL_CLOSED: placeholder authority-url is not allowed"; exit 1 }
-        if ($authorityPubkey -eq 'example-pubkey-placeholder') { Write-Error "FAIL_CLOSED: placeholder authority-pubkey is not allowed"; exit 1 }
-        if ($policyId -eq 'example-policy') { Write-Error "FAIL_CLOSED: placeholder policy-id is not allowed"; exit 1 }
+        if ($authorityUrl -eq 'https://admit.ai-admissibility.com') { Write-Error "FAIL_CLOSED: default authority-url is not allowed"; exit 1 }
+        if ($authorityPubkey -eq 'example-pubkey-default') { Write-Error "FAIL_CLOSED: default authority-pubkey is not allowed"; exit 1 }
+        if ($policyId -eq 'example-policy-default') { Write-Error "FAIL_CLOSED: default policy-id is not allowed"; exit 1 }
         if ($trustVerdict -ne 'PASS') { Write-Error "FAIL_CLOSED: trust-verdict must be PASS"; exit 1 }
         if ($pilotSmokeOnly -eq 'true') {
           Write-Host "PILOT_PROOF_ACCESS_SMOKE=PASS"
