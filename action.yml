@@ -1,5 +1,5 @@
 name: ai-admissibility-action
-description: Fail-closed external admission gate for GitHub Actions before execution.
+description: Public evaluation gate for AI Admissibility; synthetic smoke only until runtime authority integration is wired.
 author: Pin Floyd
 branding:
   icon: shield
