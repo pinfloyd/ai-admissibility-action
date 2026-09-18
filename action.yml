@@ -1,15 +1,17 @@
 name: ai-admissibility-action
 description: Public evaluation gate for AI Admissibility; synthetic smoke only until runtime authority integration is wired.
 author: Pin Floyd
+
 branding:
   icon: shield
   color: purple
+
 inputs:
   authority-url:
-    description: External authority endpoint URL.
+    description: External authority endpoint URL used as evaluation context.
     required: false
   authority-pubkey:
-    description: Pinned authority public key.
+    description: Pinned authority public key or digest used as evaluation context.
     required: false
   policy-id:
     description: Policy identifier.
@@ -18,47 +20,81 @@ inputs:
     description: Runtime trust verdict. Must be PASS.
     required: false
   proof-access-id:
-    description: Proof Access ID for the self-guided evaluation flow.
-    required: true
+    description: Deprecated compatibility input for older examples. The current public site does not issue Proof Access IDs.
+    required: false
   pilot-smoke-only:
-    description: Synthetic evaluation mode for Marketplace onboarding only. Not production access.
+    description: Synthetic evaluation mode only. Not production access and not a live authority call.
     required: false
     default: "false"
+
 runs:
   using: composite
   steps:
-    - name: Validate proof access id
+    - name: Validate deprecated compatibility input when supplied
       shell: bash
       run: |
-        if [ -z "${{ inputs.proof-access-id }}" ]; then
-          echo "proof-access-id is required"
-          exit 1
+        set -euo pipefail
+        PROOF_ACCESS_ID='${{ inputs.proof-access-id }}'
+        if [ -n "$PROOF_ACCESS_ID" ]; then
+          case "$PROOF_ACCESS_ID" in
+            REPLACE_WITH_PROOF_ACCESS_ID|example-proof-access-id|proof-access-id|YOUR_PROOF_ACCESS_ID|placeholder|TODO)
+              echo "FAIL_CLOSED: proof-access-id placeholder is not allowed"
+              exit 1
+              ;;
+          esac
+          echo "NOTICE: proof-access-id is a deprecated compatibility input and is not a current credential."
         fi
-        if [ "${{ inputs.proof-access-id }}" = "REPLACE_WITH_PROOF_ACCESS_ID" ] || [ "${{ inputs.proof-access-id }}" = "example-proof-access-id" ] || [ "${{ inputs.proof-access-id }}" = "proof-access-id" ]; then
-          echo "proof-access-id must be a real issued evaluation id"
-          exit 1
-        fi
+
     - name: Preflight gate
       shell: pwsh
       run: |
         $ErrorActionPreference = "Stop"
+
         $authorityUrl = '${{ inputs.authority-url }}'
         $authorityPubkey = '${{ inputs.authority-pubkey }}'
         $policyId = '${{ inputs.policy-id }}'
         $trustVerdict = '${{ inputs.trust-verdict }}'
         $pilotSmokeOnly = '${{ inputs.pilot-smoke-only }}'
-        if ([string]::IsNullOrWhiteSpace($authorityUrl)) { Write-Error "FAIL_CLOSED: authority-url is missing"; exit 1 }
-        if ([string]::IsNullOrWhiteSpace($authorityPubkey)) { Write-Error "FAIL_CLOSED: authority-pubkey is missing"; exit 1 }
-        if ([string]::IsNullOrWhiteSpace($policyId)) { Write-Error "FAIL_CLOSED: policy-id is missing"; exit 1 }
-        if ([string]::IsNullOrWhiteSpace($trustVerdict)) { Write-Error "FAIL_CLOSED: trust-verdict is missing"; exit 1 }
-        if ($authorityUrl -eq 'https://admit.ai-admissibility.com') { Write-Error "FAIL_CLOSED: default authority-url is not allowed"; exit 1 }
-        if ($authorityPubkey -eq 'example-pubkey-default') { Write-Error "FAIL_CLOSED: default authority-pubkey is not allowed"; exit 1 }
-        if ($policyId -eq 'example-policy-default') { Write-Error "FAIL_CLOSED: default policy-id is not allowed"; exit 1 }
-        if ($trustVerdict -ne 'PASS') { Write-Error "FAIL_CLOSED: trust-verdict must be PASS"; exit 1 }
+
+        if ([string]::IsNullOrWhiteSpace($authorityUrl)) {
+          Write-Error "FAIL_CLOSED: authority-url is missing"
+          exit 1
+        }
+        if ([string]::IsNullOrWhiteSpace($authorityPubkey)) {
+          Write-Error "FAIL_CLOSED: authority-pubkey is missing"
+          exit 1
+        }
+        if ([string]::IsNullOrWhiteSpace($policyId)) {
+          Write-Error "FAIL_CLOSED: policy-id is missing"
+          exit 1
+        }
+        if ([string]::IsNullOrWhiteSpace($trustVerdict)) {
+          Write-Error "FAIL_CLOSED: trust-verdict is missing"
+          exit 1
+        }
+
+        if ($authorityUrl -eq 'https://admit.ai-admissibility.com') {
+          Write-Error "FAIL_CLOSED: default authority-url is not allowed"
+          exit 1
+        }
+        if ($authorityPubkey -in @('example-pubkey-default','example-pubkey-placeholder')) {
+          Write-Error "FAIL_CLOSED: placeholder authority-pubkey is not allowed"
+          exit 1
+        }
+        if ($policyId -in @('example-policy-default','example-policy')) {
+          Write-Error "FAIL_CLOSED: placeholder policy-id is not allowed"
+          exit 1
+        }
+        if ($trustVerdict -ne 'PASS') {
+          Write-Error "FAIL_CLOSED: trust-verdict must be PASS"
+          exit 1
+        }
+
         if ($pilotSmokeOnly -eq 'true') {
-          Write-Host "PILOT_PROOF_ACCESS_SMOKE=PASS"
-          Write-Host "NON_CLAIMS=synthetic_evaluation_only_not_production_not_paid_tier_not_private_deployment"
+          Write-Host "PILOT_SYNTHETIC_SMOKE=PASS"
+          Write-Host "NON_CLAIMS=synthetic_evaluation_only_not_live_authority_not_production_not_customer_no_bypass"
           exit 0
         }
-        Write-Error "FAIL_CLOSED: runtime authority integration is not wired yet"
+
+        Write-Error "FAIL_CLOSED: runtime authority integration is not wired in this public Action"
         exit 1
