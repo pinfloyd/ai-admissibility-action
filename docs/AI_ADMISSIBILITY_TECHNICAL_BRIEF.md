@@ -1,94 +1,89 @@
 # AI Admissibility Technical Brief
 
-## External fail-closed gate for AI-driven execution
+## External pre-execution admission before high-impact execution
 
-AI Admissibility is an external ALLOW/DENY boundary for AI-driven workflows, GitHub Actions, agents, and automation systems. Its purpose is simple: execution should not proceed unless a valid authority decision exists before the action runs.
+AI Admissibility is an external ALLOW/DENY boundary model for AI-driven workflows, agents, CI/CD jobs, cloud identity flows, and other authority-bearing automation.
+
+The core rule is:
+
+**No Admission = No Execution.**
 
 ## The problem
 
-AI and automation can now modify code, trigger deployments, approve workflow steps, call APIs, and affect infrastructure. In many systems, the first real control happens after execution: logs, scans, alerts, reviews, or incident reports. That is too late for high-impact automation.
+AI and automation can modify code, trigger deployments, call APIs, change infrastructure, move money, or affect customer state. Scanners, logs, reviews, and incident reports can be useful, but they often operate after or around execution.
 
-## Why post-event audit is not enough
+AI Admissibility addresses a different question:
 
-A scanner can tell you what happened. A log can help explain what failed. A dashboard can show risk after the fact. None of those stop execution before it happens. AI Admissibility is built around a stricter rule: no valid authority decision means no execution.
+**Should this actor, with this intent, in this current context, receive authority to act before the protected effect occurs?**
 
-## What AI Admissibility does
+## Canonical public demonstration
 
-AI Admissibility adds an external pre-execution gate. A workflow or agent must obtain an authority-backed decision before continuing. If the decision is missing, invalid, stale, unverifiable, or denied, the client fails closed.
+The canonical installed boundary used for the current public demonstration is:
 
-Core behavior:
+`AI_BOUNDARY_RELEASE_V1`
 
-- validate required authority context;
-- reject placeholder configuration;
-- request or receive an authority decision;
-- verify the decision before proceeding;
-- fail closed by default;
-- separate pilot proof from production access.
+The official live demonstration is:
 
-## GitHub Action pilot path
+https://ai-admissibility.com/canonical-pilot/
 
-The public GitHub Action is the developer-facing pilot surface. It allows a user to request temporary Proof Access, pass a proof_access_id into GitHub Actions, and run a synthetic smoke workflow.
+The public browser uses a fixed demonstration path. It does not receive unrestricted authority credentials and cannot directly invoke the isolated protected effect mechanism.
 
-Verified pilot E2E PASS run: https://github.com/pinfloyd/ai-admissibility-action/actions/runs/24959798826
+The public identity endpoint is intentionally protected, and anonymous admission is intentionally rejected. Those properties are part of the current public contract, not signs that the boundary is unavailable.
 
-Pilot path:
+## GitHub Action role
 
-1. Open https://ai-admissibility.com/#get-proof-access
-2. Request Proof Access.
-3. Copy the returned proof_access_id.
-4. Run the Pilot Proof Access Smoke workflow.
-5. Confirm the log contains PILOT_PROOF_ACCESS_SMOKE=PASS.
+This repository is a bounded evaluation surface.
 
-## Production path
+The Action:
 
-The production path is not the same as the synthetic pilot. In production, a client should not manually provide a trust verdict in YAML. The action should send a deterministic request payload to the hosted authority, receive a signed ALLOW/DENY decision, verify it locally, and continue only if the signed decision is valid.
+- validates required evaluation context;
+- rejects placeholder configuration;
+- supports an explicit synthetic smoke mode;
+- fails closed outside that synthetic mode because runtime authority integration is not wired in this public repository.
 
-Production flow:
+The Action does **not** call the canonical installed boundary for general customer execution and does not create a production boundary merely by being installed.
 
-1. Customer receives access context after approval or payment.
-2. Workflow builds a deterministic request payload.
-3. Hosted authority evaluates the request.
-4. Authority returns a signed ALLOW/DENY decision.
-5. GitHub Action verifies signature, policy, request hash, and verdict.
-6. Workflow continues only on valid ALLOW.
-7. Everything else fails closed.
+## Synthetic evaluation
 
-## Pilot non-claims
+A synthetic smoke run proves only that the Action loads, validates its inputs, and maintains fail-closed discipline around its bounded evaluation path.
 
-The current public pilot is synthetic evaluation only. It is not production access, not paid tier access, not private deployment, and not a customer no-bypass guarantee. It proves the onboarding path, action loading, proof_access_id propagation, and fail-closed discipline.
+Historical synthetic smoke evidence may still exist in GitHub Actions history. That evidence is not a current credential-issuance or production-access path.
 
-## Who this is for
+## Real integration requirement
 
-AI Admissibility is for teams that allow AI or automation to touch code, deployments, approvals, infrastructure, or high-impact workflows.
+A real high-impact workflow needs a stronger property than a successful Action run:
 
-Relevant users:
+1. the exact protected action is defined;
+2. a separate authority decides before that action;
+3. the client verifies the authority result;
+4. DENY, missing, invalid, expired, stale, or unverifiable admission blocks execution;
+5. no alternate bypass path reaches the same protected effect.
 
-- GitHub Actions and CI/CD teams;
-- AI agent builders;
-- DevOps and platform teams;
-- security teams evaluating AI execution risk;
-- founders building automation-heavy systems;
-- teams that need pre-execution control rather than post-event audit.
+That customer-specific no-bypass property is not claimed by the public Marketplace evaluation Action.
 
-## What you get
+## Public role and non-claims
 
-Pilot:
+The website and GitHub repositories are public showcase, documentation, proof, and demonstration surfaces.
 
-- temporary proof_access_id;
-- GitHub Actions smoke workflow;
-- public PASS/DENY proof path;
-- synthetic evaluation only.
+They do not provide:
 
-Private / production path:
+- public checkout;
+- payment processing;
+- automatic credential issuance;
+- a generally open production authority endpoint;
+- customer production execution;
+- a universal safety, security, legal, or compliance guarantee.
 
-- hosted authority endpoint;
-- access context and policy binding;
-- signed ALLOW/DENY decision path;
-- local verification;
-- fail-closed integration guidance.
+## Collaboration
 
-## Call to action
+For research, integration, collaboration, or deployment discussions:
 
-Start with Proof Access: https://ai-admissibility.com/#get-proof-access
+**governance@ai-admissibility.com**
 
-For production or private deployment, request commercial access from the site.
+## Public references
+
+- Official site: https://ai-admissibility.com/
+- Canonical demo: https://ai-admissibility.com/canonical-pilot/
+- Reference Guide: https://ai-admissibility.com/reference-guide/
+- Surrogate Boundary Test: https://ai-admissibility.com/surrogate-boundary-test/
+- Boundary repository: https://github.com/pinfloyd/ai-admissibility-boundary
