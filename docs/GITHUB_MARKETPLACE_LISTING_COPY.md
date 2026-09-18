@@ -1,4 +1,4 @@
-# GitHub Marketplace Listing Copy v2 — Clean
+# GitHub Marketplace Listing Copy — current public semantics
 
 ## Product name
 
@@ -6,46 +6,57 @@ AI Admissibility Action
 
 ## One-line tagline
 
-Stop AI-driven workflows unless an external authority allows execution.
+Fail closed unless the required admission context is valid before execution.
 
 ## Short description
 
-A fail-closed GitHub Action for AI and automation workflows. It validates authority context, blocks placeholder setup, supports a Proof Access pilot, and keeps execution stopped unless the required admission path is valid.
+A bounded GitHub Action evaluation surface for external-admission concepts. It validates authority context, rejects placeholder setup, supports an explicit synthetic smoke mode, and fails closed because live runtime authority integration is not wired in the public Action.
 
 ## Marketplace description
 
-AI Admissibility Action is a developer-facing gate for AI-driven execution. It is designed for GitHub Actions, CI/CD workflows, agents, and automation systems where execution should not continue unless an external authority decision exists before the action runs.
+AI Admissibility Action is a developer-facing evaluation surface for AI-driven and automated execution.
 
-Most security tools explain what happened after execution. AI Admissibility is built around a stricter rule: no valid authority decision means no execution.
+It demonstrates one core discipline:
 
-The public pilot path lets a developer request temporary Proof Access, pass a proof_access_id into GitHub Actions, and verify the synthetic smoke path through a public PASS run. Production access is separate and is intended to use a hosted authority decision, signed ALLOW/DENY response, local verification, and fail-closed behavior.
+**No Admission = No Execution.**
+
+The public Action validates its required inputs and can run an explicit synthetic smoke path. Outside that synthetic path, it intentionally fails closed because the public Action is not wired to the canonical installed authority.
+
+The canonical live demonstration is separate:
+
+https://ai-admissibility.com/canonical-pilot/
+
+Installing the Marketplace Action alone does not create a customer production boundary and does not prove a no-bypass integration.
 
 ## What it does
 
-- Validates required authority inputs.
-- Rejects placeholder configuration.
-- Provides a Proof Access pilot workflow.
-- Demonstrates fail-closed behavior when authority integration is not wired.
-- Links the action, technical brief, and verified pilot PASS run into one public proof path.
+- Validates required evaluation inputs.
+- Rejects missing and placeholder configuration.
+- Provides an explicit synthetic smoke path.
+- Demonstrates fail-closed behavior when live authority integration is absent.
+- Keeps the public Action distinct from the canonical installed boundary.
+
+## What it does not do
+
+- No public checkout or payment processing.
+- No automatic credential issuance.
+- No generally open production authority endpoint.
+- No customer-specific no-bypass guarantee.
+- No monitoring, scanning, rollback, or universal security claim.
+
+## Historical compatibility
+
+Older published tags may still contain Proof Access or Hosted Authority language from earlier product stages. Published tags are historical artifacts and are not rewritten.
+
+Use the current default branch and official site for current public semantics.
 
 ## Who it is for
 
-- GitHub Actions and CI/CD teams.
-- AI agent builders.
-- DevOps and platform teams.
-- Security teams evaluating AI execution risk.
-- Teams that need pre-execution control instead of post-event audit.
-
-## Public proof
-
-- Site technical brief is published.
-- GitHub docs technical brief is published.
-- Verified pilot E2E PASS run is public.
-- Proof Access entry is available from the site.
-
-## Non-claims
-
-The current public pilot is synthetic evaluation only. It is not production access, not paid tier access, not private deployment, and not a customer no-bypass guarantee.
+- GitHub Actions and CI/CD teams;
+- AI agent builders;
+- DevOps and platform teams;
+- security teams evaluating AI execution risk;
+- teams studying pre-execution authority separation.
 
 ## Suggested categories
 
@@ -53,12 +64,14 @@ Security, DevOps, CI/CD, GitHub Actions, AI Safety, Automation Governance, Polic
 
 ## Search keywords
 
-ai security, github actions security, fail closed, admission control, policy gate, ai agent security, ci cd gate, pre execution control, automation risk, external authority, allow deny, proof access
+ai security, github actions security, fail closed, admission control, policy gate, ai agent security, ci cd gate, pre execution control, automation risk, external authority, allow deny
 
-## Links / Next steps
+## Links / next steps
 
-Get Proof Access: https://ai-admissibility.com/#get-proof-access
+Canonical live demo: https://ai-admissibility.com/canonical-pilot/
 
-Read the Technical Brief: https://ai-admissibility.com/technical-brief/
+Technical Brief: https://ai-admissibility.com/technical-brief/
 
-View verified pilot PASS run: https://github.com/pinfloyd/ai-admissibility-action/actions/runs/24959798826
+Reference Guide: https://ai-admissibility.com/reference-guide/
+
+Collaboration: governance@ai-admissibility.com
