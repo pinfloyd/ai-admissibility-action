@@ -2,7 +2,7 @@
 
 **Public GitHub Marketplace evaluation surface for fail-closed external admission.**
 
-Official product surface:
+Official public demonstration surface:
 
 https://ai-admissibility.com/
 
@@ -12,7 +12,7 @@ This Action provides a bounded public evaluation path.
 
 - Missing or invalid admission context fails closed.
 - `pilot-smoke-only: "true"` provides a synthetic Proof Access smoke path.
-- Outside that synthetic evaluation path, runtime authority integration is **not yet wired in this public Action** and the Action intentionally fails closed.
+- Outside that synthetic evaluation path, runtime authority integration is **not wired in this public Action** and the Action intentionally fails closed.
 
 Therefore this repository does **not** claim that installing the Marketplace Action alone creates a production external admission boundary.
 
@@ -42,15 +42,16 @@ Therefore this repository does **not** claim that installing the Marketplace Act
 - not a production no-bypass guarantee by default;
 - not a public unauthenticated authority endpoint;
 - not monitoring, scanning, or rollback;
-- not a customer-specific production deployment.
+- not a customer-specific production deployment;
+- not a commercial checkout, credential issuance, or hosted customer runtime.
 
-## Production / private integration
+## Public role and collaboration
 
-Customer-specific runtime integration requires a controlled authority contract, access binding, and validation of both DENY and ALLOW behavior for the protected workflow.
+The website and GitHub repositories are public showcase and demonstration surfaces only.
 
-Request access:
+They demonstrate the boundary model and fail-closed behavior. Any real collaboration or deployment discussion happens separately and begins by email:
 
-https://ai-admissibility.com/request
+**governance@ai-admissibility.com**
 
 ## Related surfaces
 
