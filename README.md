@@ -1,6 +1,6 @@
 # AI Admissibility Action
 
-**Public GitHub Marketplace evaluation surface for fail-closed external admission.**
+**Public GitHub evaluation surface for fail-closed external admission concepts.**
 
 Official public demonstration surface:
 
@@ -8,53 +8,63 @@ https://ai-admissibility.com/
 
 ## Current implementation status
 
-This Action provides a bounded public evaluation path.
+This repository is a bounded public evaluation surface.
 
-- Missing or invalid admission context fails closed.
-- `pilot-smoke-only: "true"` provides a synthetic Proof Access smoke path.
-- Outside that synthetic evaluation path, runtime authority integration is **not wired in this public Action** and the Action intentionally fails closed.
+- It validates required admission context.
+- It rejects missing or placeholder configuration.
+- `pilot-smoke-only: "true"` provides a synthetic smoke path.
+- Outside that synthetic path, runtime authority integration is **not wired in this public Action** and the Action intentionally fails closed.
 
-Therefore this repository does **not** claim that installing the Marketplace Action alone creates a production external admission boundary.
+Installing this Action alone does **not** create a production external admission boundary and does not provide customer-specific no-bypass protection.
 
-## Example evaluation usage
+## Example synthetic evaluation
+
+The current `main` branch is evaluation-only:
 
 ```yaml
-- name: AI Admissibility Gate
-  uses: pinfloyd/ai-admissibility-action@v0.1.1
+- name: AI Admissibility synthetic evaluation
+  uses: pinfloyd/ai-admissibility-action@main
   with:
     authority-url: https://example-authority.company.tld/admit
     authority-pubkey: sha256:replace-with-pinned-authority-pubkey
     policy-id: ai-secrets-v1
     trust-verdict: PASS
-    proof-access-id: REPLACE_WITH_PROOF_ACCESS_ID
     pilot-smoke-only: "true"
 ```
 
+The `proof-access-id` input is retained only as a deprecated compatibility input for older examples. The current public website does not issue Proof Access IDs or credentials.
+
 ## What the public Action proves
 
-- required Proof Access context is checked;
-- missing or placeholder values are rejected;
-- admission inputs are validated fail-closed;
-- the synthetic evaluation path is explicitly separated from production claims.
+- required admission inputs are checked;
+- placeholder or incomplete configuration is rejected;
+- a non-PASS trust verdict is rejected;
+- the synthetic evaluation path is clearly separated from production claims;
+- outside the synthetic path, absence of runtime authority integration fails closed.
 
 ## What it does not claim
 
-- not a production no-bypass guarantee by default;
-- not a public unauthenticated authority endpoint;
-- not monitoring, scanning, or rollback;
-- not a customer-specific production deployment;
-- not a commercial checkout, credential issuance, or hosted customer runtime.
+- no production no-bypass guarantee by default;
+- no public unauthenticated authority endpoint;
+- no monitoring, scanning, or rollback claim;
+- no customer-specific production deployment;
+- no checkout, payment processing, credential issuance, or hosted customer runtime.
+
+## Historical release note
+
+Published historical tags are not rewritten. Older tags may still contain Proof Access, Hosted Authority, payment, or access-language from earlier product stages. Those tags are historical artifacts; use `main` and the official site for current public semantics.
 
 ## Public role and collaboration
 
-The website and GitHub repositories are public showcase and demonstration surfaces only.
+The website and GitHub repositories are public showcase, documentation, proof, and demonstration surfaces.
 
-They demonstrate the boundary model and fail-closed behavior. Any real collaboration or deployment discussion happens separately and begins by email:
+For research, integration, collaboration, or deployment discussions:
 
 **governance@ai-admissibility.com**
 
 ## Related surfaces
 
+- Canonical live demonstration: https://ai-admissibility.com/canonical-pilot/
 - Boundary architecture / proof: https://github.com/pinfloyd/ai-admissibility-boundary
 - Compatibility slug retained for older references: https://github.com/pinfloyd/cnp-action
 - Technical Brief: https://ai-admissibility.com/technical-brief/
